@@ -1,0 +1,24 @@
+{
+	location : "Seville",
+	nextLocation : "Canary Islands"
+},
+{
+	location : "Canary Islands",
+	nextLocation : "Cape Verde"
+},
+{
+	location : "Cape Verde",
+	nextLocation : "Strait of Magellan"
+},
+{
+	location : "Strait of Magellan",
+	nextLocation : "Guam"
+},
+{
+	location : "Guam",
+	nextLocation : "Phillipines"
+},
+{
+	location : "Phillipines",
+	nextLocation : "Seville"
+}
