@@ -10,16 +10,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 
-// ROUTES
+var next = require("./public/json/next.json");
 
-app.get("/",function(request,response){
-	response.sendFile("/html/index.html",{root: "./public"})
-})
-
-app.get("/next",function(request,response){
-	
-	response.sendFile("/json/next.json",{root:"./public"})
-})
+// FUNCTIONS
 
 var capitalize = function(param){
 	var capitalized = param.split(" ").map(function(element){
@@ -28,11 +21,49 @@ var capitalize = function(param){
 	return capitalized.join(" ")
 }
 
+var didVisit = function (param){
+	var visited = ["seville","canaryislands","capeverde","guam","phillipines","straitofmagellan"]
+	if((param===visited[0])||(param===visited[1])||(param===visited[2])||(param===visited[3])||(param===visited[4])||(param===visited[5])){
+		return true
+	}
+	else{
+		return false
+	}
+}
+
+// VARIABLES
+
+var current = "seville";
+
+// ROUTES
+
+app.get("/",function(request,response){
+	response.sendFile("/html/index.html",{root: "./public"})
+})
+
+app.get("/next",function(request,response){
+	next.forEach(function(element,index){
+		if(element.location.toLowerCase().split(" ").join("") === current){
+		response.send("The next stop on Magellan's adventure was " + next[index].nextLocation + ".")
+		}
+	})
+})
+
 app.get("/*",function(request,response){
-	// response.sendFile("/html/nomagellan.html",{root:"./public"})
-	capitalize(request.params[0])
-	response.send("Magellan never travelled to " + capitalize(request.params[0]) + "! Try again.")
-	
+	current = request.params[0]
+	if(didVisit(current)){
+		response.sendFile("/html/" + request.params[0] + ".html",{root:"./public"})
+	}
+	else{
+	response.sendFile("/html/nomagellan.html",{root:"./public"})
+	// capitalize(request.params[0])
+	// response.send("Magellan never travelled to " + capitalize(request.params[0]) + "! Try again.")
+	}
+})
+
+
+app.get("/next",function(request,response){
+	response.sendFile("/json/next.json",{root:"./public"})
 })
 
 // SET SERVER
